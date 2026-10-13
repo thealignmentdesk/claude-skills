@@ -47,7 +47,7 @@ def pick_fonts():
     return "Helvetica", "Helvetica-Bold"
 
 
-FONT, BOLD = pick_fonts()
+FONT, BOLD = "Helvetica", "Helvetica-Bold"   # chosen per workbook in build()
 
 
 def styles(young):
@@ -66,7 +66,10 @@ def styles(young):
 
 def esc(text):
     """Plain text to reportlab paragraph markup; **bold** allowed."""
-    t = str(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    t = str(text)
+    if FONT == "Helvetica":
+        t = t.replace("−", "-")   # math minus: not in the built-in font, a hyphen prints the same
+    t = t.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
     t = re.sub(r"\*\*(.+?)\*\*", rf'<font name="{BOLD}">\1</font>', t)
     return t.replace("\n", "<br/>")
 
@@ -133,7 +136,8 @@ def question_block(num, q, st, width, young):
         parts.append(Spacer(1, 4))
         parts.append(NumberLine(nl["from"], nl["to"], nl.get("step", 1), width - 20, nl.get("label_every", 1)))
     if kind == "mc":
-        rows = [[Paragraph(f"○&nbsp;&nbsp;{chr(65 + i)}.&nbsp;&nbsp;{esc(ch)}", st["q"])] for i, ch in enumerate(q.get("choices", []))]
+        mark = "( )" if FONT == "Helvetica" else "○"
+        rows = [[Paragraph(f"{mark}&nbsp;&nbsp;{chr(65 + i)}.&nbsp;&nbsp;{esc(ch)}", st["q"])] for i, ch in enumerate(q.get("choices", []))]
         parts.append(Table(rows, colWidths=[width - 30], style=[("LEFTPADDING", (0, 0), (-1, -1), 18),
                                                                 ("TOPPADDING", (0, 0), (-1, -1), 1), ("BOTTOMPADDING", (0, 0), (-1, -1), 1)]))
     elif kind == "fill":
@@ -159,7 +163,12 @@ def footer(text):
 
 
 def build(plan, out_dir):
-    global ACC, SOFT, LINE, PRINTER
+    global ACC, SOFT, LINE, PRINTER, FONT, BOLD
+    try:   # plain Latin text: use the PDF's built-in Helvetica, no embedded font, so the file is ~5x smaller (easier to email)
+        json.dumps(plan, ensure_ascii=False).replace("−", "-").encode("cp1252")   # Helvetica's WinAnsi set
+        FONT, BOLD = "Helvetica", "Helvetica-Bold"
+    except UnicodeEncodeError:
+        FONT, BOLD = pick_fonts()
     if plan.get("printer_friendly"):
         PRINTER, ACC, SOFT, LINE = True, INK, colors.white, colors.HexColor("#8a8a8a")
     young = int(re.sub(r"\D", "", str(plan.get("grade", "5"))) or 5) <= 3

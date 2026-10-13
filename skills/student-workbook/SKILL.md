@@ -90,6 +90,16 @@ It makes two PDFs: `…-workbook.pdf` for the child and `…-answer-key.pdf` for
 
 Then tell the user in 3-5 lines: what's in it, which expectations it follows (with the official link), and one suggestion (for example "Do the warm-up together, then let them try the practice alone").
 
+## Step 6 (optional): Email it
+
+If the user asks ("email it to me", "send it to my Gmail"), or the profile says so, and a Gmail connector is connected:
+- Attach **both PDFs** (workbook and answer key). Read each file as base64 (e.g. `base64 -w0 file.pdf`, or `base64 -i file.pdf` on a Mac) and pass it as an attachment with `mimeType` `application/pdf` and the file name.
+- Subject like "Workbook for Joe: Place value (Grade 4)". Body: 2-3 lines on what's inside, and "The answer key is the second file. Keep it for yourself."
+- **Make a draft by default**, addressed to the user's own email, and tell them it's in their Drafts to check and send or print. Send directly only if the user asks for that in this chat, and only to the user's own address or one they typed in this chat (e.g. a tutor or the other parent). Never email the child, the school or anyone else unprompted.
+- If there's no Gmail connector, say how to add one (Settings › Connectors › Gmail) or just give the download links.
+
+Save the choice in the profile (`Delivery: Gmail draft to me`) if the user wants it every time.
+
 ## Save the profiles
 
 Save after a setup, and offer to after a first workbook made without one ("Want me to save this as a profile for Joe?"). Update a profile when something changes (new grade, a new subject they practise, a new preference). Save only: nickname, country and province or state, grade and school year, default subjects, topics already practised, and preferences. Never save surnames, school names or anything from a scanned page.
@@ -103,6 +113,7 @@ Save after a setup, and offer to after a first workbook made without one ("Want 
   Grade: 4 (school year 2026-27)
   Subjects: math
   Preferences: 4 pages, printer friendly, Letter, no cover page
+  Delivery: Gmail draft to me
   Practised: fractions (13 Oct), place value (13 Oct)
 
   ## Mia
