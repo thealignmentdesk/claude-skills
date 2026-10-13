@@ -26,6 +26,7 @@ ACC = colors.HexColor("#c96442")
 SOFT = colors.HexColor("#f4efe6")
 LINE = colors.HexColor("#c4bcae")
 MUTE = colors.HexColor("#6e6a63")
+PRINTER = False   # printer friendly: no tinted boxes, black accents (set from the plan)
 LEVELS = {1: "Warm-up", 2: "Practice", 3: "Challenge"}
 
 
@@ -111,7 +112,10 @@ class NumberLine(Flowable):
                 c.drawCentredString(x, 3, f"{v:g}")
 
 
-def boxed(flowables, width, fill=SOFT, border=None):
+def boxed(flowables, width, fill=None, border=None):
+    fill = SOFT if fill is None else fill
+    if PRINTER and border is None:
+        border = LINE
     t = Table([[flowables]], colWidths=[width])
     st = [("BACKGROUND", (0, 0), (-1, -1), fill), ("LEFTPADDING", (0, 0), (-1, -1), 10),
           ("RIGHTPADDING", (0, 0), (-1, -1), 10), ("TOPPADDING", (0, 0), (-1, -1), 8), ("BOTTOMPADDING", (0, 0), (-1, -1), 8)]
@@ -155,6 +159,9 @@ def footer(text):
 
 
 def build(plan, out_dir):
+    global ACC, SOFT, LINE, PRINTER
+    if plan.get("printer_friendly"):
+        PRINTER, ACC, SOFT, LINE = True, INK, colors.white, colors.HexColor("#8a8a8a")
     young = int(re.sub(r"\D", "", str(plan.get("grade", "5"))) or 5) <= 3
     st = styles(young)
     size = A4 if plan.get("paper", "letter").lower() == "a4" else LETTER
@@ -165,27 +172,37 @@ def build(plan, out_dir):
     foot = f'{plan.get("grade", "")} {plan.get("subject", "")} · {plan.get("region", "")}'.strip()
 
     # ---- student workbook
-    story = [Spacer(1, 40 * mm), Paragraph(esc(plan["title"]), st["title"]), Spacer(1, 6),
-             Paragraph(esc(f'{plan.get("grade", "")} · {plan.get("subject", "")}'), st["sub"]), Spacer(1, 18 * mm)]
-    story.append(Table([[Paragraph("Name: ______________________________", st["body"]),
-                         Paragraph("Date: ________________", st["body"])]], colWidths=[width * 0.62, width * 0.38]))
-    story.append(Spacer(1, 14 * mm))
-    toc = [Paragraph(f'<font name="{BOLD}">Inside</font>', st["body"])]
-    for i, sec in enumerate(plan["sections"], 1):
-        toc.append(Paragraph(f'{i}. {esc(sec["heading"])}', st["body"]))
-    story.append(boxed(toc, width))
-    story.append(Spacer(1, 8 * mm))
+    name_line = f'Name: {esc(plan["child"])}' if plan.get("child") else "Name: ______________________________"
     cur = plan.get("curriculum", {})
-    if cur:
-        story.append(Paragraph(esc(f'Follows: {cur.get("name", "")}') + (f'<br/>{esc(cur["url"])}' if cur.get("url") else ""), st["small"]))
-    if plan.get("for_adults"):
-        story.append(Spacer(1, 4 * mm))
-        story.append(Paragraph(f'<font name="{BOLD}">For the adult:</font> {esc(plan["for_adults"])}', st["small"]))
-    story.append(PageBreak())
+    if plan.get("compact_cover"):   # a header on page 1 instead of a cover page (saves a page)
+        story = [Paragraph(esc(plan["title"]), st["h"]),
+                 Paragraph(esc(f'{plan.get("grade", "")} · {plan.get("subject", "")}' + (f' · Follows: {cur.get("name", "")}' if cur else "")), st["small"]),
+                 Spacer(1, 4),
+                 Table([[Paragraph(name_line, st["body"]), Paragraph("Date: ________________", st["body"])]],
+                       colWidths=[width * 0.62, width * 0.38]),
+                 Spacer(1, 10)]
+    else:
+        story = [Spacer(1, 40 * mm), Paragraph(esc(plan["title"]), st["title"]), Spacer(1, 6),
+                 Paragraph(esc(f'{plan.get("grade", "")} · {plan.get("subject", "")}'), st["sub"]), Spacer(1, 18 * mm)]
+        story.append(Table([[Paragraph(name_line, st["body"]),
+                             Paragraph("Date: ________________", st["body"])]], colWidths=[width * 0.62, width * 0.38]))
+        story.append(Spacer(1, 14 * mm))
+        toc = [Paragraph(f'<font name="{BOLD}">Inside</font>', st["body"])]
+        for i, sec in enumerate(plan["sections"], 1):
+            toc.append(Paragraph(f'{i}. {esc(sec["heading"])}', st["body"]))
+        story.append(boxed(toc, width))
+        story.append(Spacer(1, 8 * mm))
+        if cur:
+            story.append(Paragraph(esc(f'Follows: {cur.get("name", "")}') + (f'<br/>{esc(cur["url"])}' if cur.get("url") else ""), st["small"]))
+        if plan.get("for_adults"):
+            story.append(Spacer(1, 4 * mm))
+            story.append(Paragraph(f'<font name="{BOLD}">For the adult:</font> {esc(plan["for_adults"])}', st["small"]))
+        story.append(PageBreak())
 
     num = 0
     for i, sec in enumerate(plan["sections"], 1):
-        story.append(CondPageBreak(90 * mm))
+        if i > 1:
+            story.append(CondPageBreak(60 * mm))
         story.append(Paragraph(f'{i}. {esc(sec["heading"])}', st["h"]))
         if sec.get("expectation"):
             e = sec["expectation"]
@@ -217,6 +234,7 @@ def build(plan, out_dir):
     doc = SimpleDocTemplate(os.path.join(out_dir, f"{slug}-workbook.pdf"), pagesize=size, leftMargin=margin,
                             rightMargin=margin, topMargin=margin, bottomMargin=20 * mm, title=plan["title"])
     doc.build(story, onFirstPage=footer(foot), onLaterPages=footer(foot))
+    pages = doc.page
 
     # ---- answer key (separate file, so the child can't see it)
     key = [Paragraph(esc(f'Answer key: {plan["title"]}'), st["h"]),
@@ -243,6 +261,7 @@ def build(plan, out_dir):
     doc = SimpleDocTemplate(os.path.join(out_dir, f"{slug}-answer-key.pdf"), pagesize=size, leftMargin=margin,
                             rightMargin=margin, topMargin=margin, bottomMargin=20 * mm, title=f'Answer key: {plan["title"]}')
     doc.build(key, onFirstPage=footer(foot + " · answer key"), onLaterPages=footer(foot + " · answer key"))
+    print(f"workbook pages: {pages}", file=sys.stderr)
     return [os.path.join(out_dir, f"{slug}-workbook.pdf"), os.path.join(out_dir, f"{slug}-answer-key.pdf")]
 
 

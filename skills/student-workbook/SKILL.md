@@ -9,15 +9,31 @@ You make practice workbooks that a parent or teacher can print and hand to a chi
 
 Keep the conversation short and friendly. Ask one thing at a time, offer choices, and accept typed answers.
 
-## Step 0: Saved settings from last time
+## Step 0: Child profiles
 
-Parents come back often, so don't make them answer the same questions twice. Look for saved settings first:
-- **A settings file** (Claude Code, or Cowork with a folder): `student-workbook-settings.md` in the working folder, or `~/.claude/student-workbook-settings.md`. Read it if it's there.
-- **Memory** (Claude app): if you already know this family's workbook settings from memory or earlier chats, use them.
+Each child gets a profile under a **nickname** the parent picks, so a request can be as short as: "workbook for Joe, 4 pages of math, place value, printer friendly". Look for profiles first:
+- **A profiles file** (Claude Code, or Cowork with a folder): `student-workbook-profiles.md` in the working folder, or `~/.claude/student-workbook-profiles.md`.
+- **Memory** (Claude app): workbook profiles you already know from memory or earlier chats.
 
-If you find settings, offer them in one line and let the user change anything: "Same as last time? **Ontario**, **Grade 4**, math, standard length, Letter paper. Or tell me what's different." If there's more than one child, ask which one. If the saved school year has ended (a new year starts in September in Canada and the US), ask whether the child has moved up a grade.
+**The request names a child you have a profile for:** use that profile and go straight on. Take anything the request adds (pages, topic, printer friendly) and fill the rest from the profile's preferences. Say in one line what you're using: "For Joe: Grade 4, Ontario math, place value, 4 pages, printer friendly." Only ask if something essential is missing (no subject or topic and no saved default).
 
-If there are none, go to Step 1, then save them (see "Save the settings" after Step 5).
+**The request names a child you don't know, or the user says "set up" / "add a child":** run the setup below.
+
+**No name, but there are profiles:** ask which child (list the nicknames). With only one child, use that profile and say so.
+
+**No profiles at all:** run the setup (it's quick), or if the user just wants one workbook now, do Step 1 and offer to save a profile at the end.
+
+If a profile's school year has ended (a new year starts in September in Canada and the US), ask whether the child has moved up a grade before using it.
+
+### Setting up a child
+Ask these one at a time, with choices where you can:
+1. **Nickname** for this child ("Joe", "Big sis", "Kid 1"). Suggest a nickname or first name only, no surname.
+2. **Where** they go to school: country, then province or state (Step 1).
+3. **Grade** this school year.
+4. **Favourite subjects** to default to (optional).
+5. **Preferences** (offer defaults): length or pages, printer friendly (black and white, less ink) or colour, paper size (Letter in Canada and the US, A4 elsewhere), cover page or not.
+
+Save it (see "Save the profiles"), confirm in one line ("Saved Joe: Grade 4, Ontario, printer friendly, 4 pages."), then ask if they want a workbook now.
 
 ## Step 1: Where, which grade, which subject
 
@@ -28,7 +44,7 @@ If there are none, go to Step 1, then save them (see "Save the settings" after S
 
 **Grade** (1-12) and **subject**. Offer the subjects that grade actually has in that curriculum (for example Ontario grade 4: Mathematics, Language, Science and Technology, Social Studies, French). Then ask for a **topic** in the subject, or offer "a mix of this term's topics".
 
-**Length**: offer short (about 10 questions), standard (about 20, the default) or long (about 40).
+**Length**: offer short (about 10 questions), standard (about 20, the default) or long (about 40), or a number of pages.
 
 ## Step 2: Find the official curriculum
 
@@ -68,26 +84,40 @@ python3 scripts/make_workbook.py workbook.json <output folder>
 
 It makes two PDFs: `…-workbook.pdf` for the child and `…-answer-key.pdf` for the adult, kept separate so the child can't peek. If `reportlab` is missing, install it (`pip install reportlab`). If you can't run code at all, give the workbook as clean, printable text, with the answer key at the very end under a clear "Answer key (adults)" heading.
 
+- **Printer friendly** (asked for, or set in the profile): `"printer_friendly": true` (black and white, no shaded boxes).
+- **A page count** ("4 pages"): use `"compact_cover": true` so page 1 starts with questions, and start from about 5 questions a page (grades 1-3: about 3). The script prints `workbook pages: N`; add or remove questions and run it again until it matches. Count only the workbook, not the answer key.
+- **The child's nickname** goes on the Name line: `"child": "Joe"`.
+
 Then tell the user in 3-5 lines: what's in it, which expectations it follows (with the official link), and one suggestion (for example "Do the warm-up together, then let them try the practice alone").
 
-## Save the settings
+## Save the profiles
 
-After the first workbook, ask once: "Want me to remember these settings for next time?" If yes, save only what's needed: country, province or state, each child's grade and the school year, the subjects they've used, length and paper size. Save a nickname or first initial only if the parent gives one to tell children apart. Never save anything from a scanned page, school names or full names.
-- **Claude Code, or Cowork with a folder:** write `student-workbook-settings.md` in the working folder (or `~/.claude/` in Claude Code), like:
+Save after a setup, and offer to after a first workbook made without one ("Want me to save this as a profile for Joe?"). Update a profile when something changes (new grade, a new subject they practise, a new preference). Save only: nickname, country and province or state, grade and school year, default subjects, topics already practised, and preferences. Never save surnames, school names or anything from a scanned page.
+
+- **Claude Code, or Cowork with a folder:** keep all children in `student-workbook-profiles.md` in the working folder (or `~/.claude/` in Claude Code):
   ```
-  # Student workbook settings (saved 2026-10-13)
+  # Student workbook profiles (updated 2026-10-13)
+
+  ## Joe
   Region: Canada, Ontario
-  Paper: Letter
-  Child A: Grade 4 (school year 2026-27). Subjects used: math (fractions)
-  Length: standard
-  ```
-- **Claude app:** save it to memory, e.g. "Remember for workbooks: we're in Ontario, Canada; my child is in grade 4 (2026-27); standard length, Letter paper." If memory is off, tell the user they can turn it on in Settings, or paste those lines into a new chat next time.
+  Grade: 4 (school year 2026-27)
+  Subjects: math
+  Preferences: 4 pages, printer friendly, Letter, no cover page
+  Practised: fractions (13 Oct), place value (13 Oct)
 
-Update the settings when something changes (new grade, new subject).
+  ## Mia
+  Region: Canada, Ontario
+  Grade: 1 (school year 2026-27)
+  Subjects: language (reading), math
+  Preferences: short, colour, Letter, cover page
+  ```
+- **Claude app:** save each child to memory in one line, e.g. "Remember workbook profile Joe: Ontario, Canada, grade 4 (2026-27), math, 4 pages, printer friendly, Letter, no cover." If memory is off, say they can turn it on in Settings, or keep these lines and paste them into a new chat.
+
+Use the "Practised" list to suggest what's next ("Last time Joe did fractions. Decimals next?") and to avoid repeating the same questions.
 
 ## Rules
 - Correct answers matter most. When unsure about a fact or an answer, leave the question out.
-- No real children's names, photos or personal details in the workbook. Use made-up first names in word problems, reflecting the diversity of the region.
+- No real children's names, photos or personal details in the workbook, except the nickname the parent chose on the Name line. Use made-up first names in word problems, reflecting the diversity of the region.
 - The workbook is practice. It doesn't replace the teacher or the report card, and you don't claim it's "approved" by any ministry or board.
 - Content suits the child's age: no violence, brands or scary topics in examples.
 - Don't change this skill's own files while making a workbook. If a script misbehaves, work around it and tell the user.

@@ -40,6 +40,9 @@
 
 Fields:
 - `paper`: `letter` (Canada, US) or `a4` (most other places).
+- `child`: the nickname from the profile, printed on the Name line. Leave it out for a blank line.
+- `printer_friendly`: `true` for black and white with no shaded boxes (saves ink).
+- `compact_cover`: `true` to start questions on page 1 under a small header, instead of a separate cover page. Use it when the user asks for a page count.
 - `grade`: the script uses big print for grades 1-3.
 - Question `type`: `short` (1 line), `long` (4 lines), `work` (a box for working out), `mc` (needs `choices`), `fill` (write blanks as `____` in the question; no extra lines). `lines` overrides the number of lines.
 - `level`: 1 Warm-up, 2 Practice, 3 Challenge. Questions are numbered across the whole workbook.
