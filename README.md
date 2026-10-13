@@ -16,3 +16,4 @@ Plain files to copy and fill in; nothing to install.
 | Kit | What it does | Works in |
 |---|---|---|
 | [team-kit](team-kit/README.md) | Run a small team of Claude agents on one job: five role cards, a shared task board, and fill-in prompts that make the agents message and check each other. | Claude Code (agent teams), Cowork |
+| [job-team-kit](job-team-kit/README.md) | A job search run by five agents in Cowork: role cards, a task board, a reviewer that sends lines back, Gmail drafts only, and a weekday schedule. | Cowork |

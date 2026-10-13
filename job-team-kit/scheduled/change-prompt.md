@@ -1,0 +1,1 @@
+Change the Jordan job search routine: on every run, put something in Gmail so I know it ran. If no job is signed off, still make one Gmail draft to me with the subject "Job search ran: no new jobs" and today's date, saying how many jobs were looked at and why they were skipped. Keep everything else the same. Never send.
