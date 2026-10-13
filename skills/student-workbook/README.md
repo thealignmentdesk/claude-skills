@@ -5,7 +5,7 @@ A free Claude skill for parents, teachers and tutors. It makes printable practic
 - **Pick a topic:** "Make Joe a 4-page math workbook on place value, printer friendly."
 - **Or snap a photo of a marked test or homework:** it finds the patterns, spots the mistakes, and writes new questions on the same skills, with extra practice where your child went wrong. It never copies the questions or does the homework.
 - **Set up each child once** under a nickname (grade, region, preferences). Next time, just say "a workbook for Joe".
-- **Email it to yourself:** with Gmail connected, it saves a draft with both PDFs attached. You check it and send it yourself.
+- **Email it to yourself:** with Gmail connected, it sends both PDFs to your own Gmail address (the connected one), ready to print. For anyone else it only makes a draft, and only when you ask.
 - **Real curriculum:** it ties each section to the official expectation (for Ontario it pulls the exact codes and wording from the Ministry of Education's site) and re-checks every answer.
 
 ## Install in the Claude app (web, desktop or phone)
@@ -23,6 +23,6 @@ npx skills add thealignmentdesk/claude-skills --skill student-workbook
 Or copy `skills/student-workbook` into `~/.claude/skills/`. The PDF builder needs `pip install reportlab`. In Claude Code, profiles are saved in `student-workbook-profiles.md` in your project.
 
 ## Privacy
-Use a nickname for each child, not a full name. Cover names and school details before you photograph a test. The skill never saves anything from a scanned page, and it never emails anyone but you unless you ask.
+Use a nickname for each child, not a full name. Cover names and school details before you photograph a test. The skill never saves anything from a scanned page, and it only ever sends to your own connected Gmail; anyone else gets a draft you send yourself.
 
 It's practice, not a replacement for your child's teacher. Check the answer key before you hand it over.

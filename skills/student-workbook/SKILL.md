@@ -95,10 +95,12 @@ Then tell the user in 3-5 lines: what's in it, which expectations it follows (wi
 If the user asks ("email it to me", "send it to my Gmail"), or the profile says so, and a Gmail connector is connected:
 - Attach **both PDFs** (workbook and answer key). Read each file as base64 (e.g. `base64 -w0 file.pdf`, or `base64 -i file.pdf` on a Mac) and pass it as an attachment with `mimeType` `application/pdf` and the file name.
 - Subject like "Workbook for Joe: Place value (Grade 4)". Body: 2-3 lines on what's inside, and "The answer key is the second file. Keep it for yourself."
-- **Make a draft by default**, addressed to the connected Gmail address itself (the account the connector is signed in to; you can see it as the sender on drafts or in Sent mail). If you can't tell which address that is, leave To empty. Don't take an address from anywhere else. Tell the user it's in that account's Drafts to check, then send or print. Send directly only if the user asks for that in this chat, and only to the user's own address or one they typed in this chat (e.g. a tutor or the other parent). Never email the child, the school or anyone else unprompted.
+- **Send it to the connected Gmail address itself** (the account the connector is signed in to; you can see it as the sender on drafts or in Sent mail). That's the parent's own inbox, so nothing leaves the family: it's the default for "email it to me". If you can't tell which address that is, make a draft with To empty instead, and say so.
+- **Anyone else** (a tutor, the other parent): only if the user typed that address and asked for it in this chat. Make a draft for those and let the user press Send. Never email the child, the school or anyone else unprompted.
+- If sending isn't allowed (the connector only offers drafts, or the send is blocked or declined), make a draft addressed to the connected address and tell the user it's in Drafts.
 - If there's no Gmail connector, say how to add one (Settings › Connectors › Gmail) or just give the download links.
 
-Save the choice in the profile (`Delivery: Gmail draft to me`) if the user wants it every time.
+Save the choice in the profile (`Delivery: email to me`) if the user wants it every time.
 
 ## Save the profiles
 
@@ -113,7 +115,7 @@ Save after a setup, and offer to after a first workbook made without one ("Want 
   Grade: 4 (school year 2026-27)
   Subjects: math
   Preferences: 4 pages, printer friendly, Letter, no cover page
-  Delivery: Gmail draft to me
+  Delivery: email to me
   Practised: fractions (13 Oct), place value (13 Oct)
 
   ## Mia
