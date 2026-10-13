@@ -9,6 +9,16 @@ You make practice workbooks that a parent or teacher can print and hand to a chi
 
 Keep the conversation short and friendly. Ask one thing at a time, offer choices, and accept typed answers.
 
+## Step 0: Saved settings from last time
+
+Parents come back often, so don't make them answer the same questions twice. Look for saved settings first:
+- **A settings file** (Claude Code, or Cowork with a folder): `student-workbook-settings.md` in the working folder, or `~/.claude/student-workbook-settings.md`. Read it if it's there.
+- **Memory** (Claude app): if you already know this family's workbook settings from memory or earlier chats, use them.
+
+If you find settings, offer them in one line and let the user change anything: "Same as last time? **Ontario**, **Grade 4**, math, standard length, Letter paper. Or tell me what's different." If there's more than one child, ask which one. If the saved school year has ended (a new year starts in September in Canada and the US), ask whether the child has moved up a grade.
+
+If there are none, go to Step 1, then save them (see "Save the settings" after Step 5).
+
 ## Step 1: Where, which grade, which subject
 
 **Region.** Curricula differ by province or state, so ask first.
@@ -59,6 +69,21 @@ python3 scripts/make_workbook.py workbook.json <output folder>
 It makes two PDFs: `…-workbook.pdf` for the child and `…-answer-key.pdf` for the adult, kept separate so the child can't peek. If `reportlab` is missing, install it (`pip install reportlab`). If you can't run code at all, give the workbook as clean, printable text, with the answer key at the very end under a clear "Answer key (adults)" heading.
 
 Then tell the user in 3-5 lines: what's in it, which expectations it follows (with the official link), and one suggestion (for example "Do the warm-up together, then let them try the practice alone").
+
+## Save the settings
+
+After the first workbook, ask once: "Want me to remember these settings for next time?" If yes, save only what's needed: country, province or state, each child's grade and the school year, the subjects they've used, length and paper size. Save a nickname or first initial only if the parent gives one to tell children apart. Never save anything from a scanned page, school names or full names.
+- **Claude Code, or Cowork with a folder:** write `student-workbook-settings.md` in the working folder (or `~/.claude/` in Claude Code), like:
+  ```
+  # Student workbook settings (saved 2026-10-13)
+  Region: Canada, Ontario
+  Paper: Letter
+  Child A: Grade 4 (school year 2026-27). Subjects used: math (fractions)
+  Length: standard
+  ```
+- **Claude app:** save it to memory, e.g. "Remember for workbooks: we're in Ontario, Canada; my child is in grade 4 (2026-27); standard length, Letter paper." If memory is off, tell the user they can turn it on in Settings, or paste those lines into a new chat next time.
+
+Update the settings when something changes (new grade, new subject).
 
 ## Rules
 - Correct answers matter most. When unsure about a fact or an answer, leave the question out.
