@@ -261,7 +261,7 @@ def build(plan, out_dir):
             if q.get("explain"):
                 ans += f'<br/><font color="#6e6a63">{esc(q["explain"])}</font>'
             rows.append([Paragraph(f'{q["_num"]}.', st["body"]), Paragraph(ans, st["body"])])
-        t = Table(rows, colWidths=[12 * mm, width - 12 * mm])
+        t = Table(rows, colWidths=[16 * mm, width - 16 * mm])
         t.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "TOP"), ("LINEBELOW", (0, 0), (-1, -1), 0.4, LINE),
                                ("TOPPADDING", (0, 0), (-1, -1), 4), ("BOTTOMPADDING", (0, 0), (-1, -1), 4)]))
         key += [t, Spacer(1, 10)]
