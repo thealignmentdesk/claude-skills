@@ -96,7 +96,7 @@ If the user asks ("email it to me", "send it to my Gmail"), or the profile says 
 - Attach **both PDFs** (workbook and answer key). Read each file as base64 (e.g. `base64 -w0 file.pdf`, or `base64 -i file.pdf` on a Mac) and pass it as an attachment with `mimeType` `application/pdf` and the file name.
 - Subject like "Workbook for Joe: Place value (Grade 4)". Body: 2-3 lines on what's inside, and "The answer key is the second file. Keep it for yourself."
 - **Send it to the connected Gmail address itself** (the account the connector is signed in to; you can see it as the sender on drafts or in Sent mail). That's the parent's own inbox, so nothing leaves the family: it's the default for "email it to me". If you can't tell which address that is, make a draft with To empty instead, and say so.
-- **Anyone else** (a tutor, the other parent): only if the user typed that address and asked for it in this chat. Make a draft for those and let the user press Send. Never email the child, the school or anyone else unprompted.
+- **Anyone else** (a tutor, the other parent): only if the user typed that address and asked for it in this chat. Make a draft for those and let the user press Send. Never email the child, the school or anyone else unprompted. Don't suggest or offer other addresses you happen to know (from the account, memory or earlier chats); the user brings up any other address themselves.
 - If sending isn't allowed (the connector only offers drafts, or the send is blocked or declined), make a draft addressed to the connected address and tell the user it's in Drafts.
 - If there's no Gmail connector, say how to add one (Settings › Connectors › Gmail) or just give the download links.
 
