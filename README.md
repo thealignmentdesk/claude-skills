@@ -7,6 +7,7 @@ Text-only where possible: open any `SKILL.md` and read it before installing. You
 | Skill | What it does | Works in |
 |---|---|---|
 | [handoff](skills/handoff/SKILL.md) | Type `/handoff` (Claude Code) or just say "handoff": Claude packs the chat into a short note so a fresh chat carries on without re-explaining. Saves it as a file where it can; in Claude Code, new sessions can offer your 5 latest handoffs to pick from. | claude.ai, desktop, phone, Cowork, Claude Code |
+| [student-workbook](skills/student-workbook/README.md) | Printable practice workbooks (grades 1-12) that follow your province, state or country's curriculum, with a separate answer key. Snap a marked test and it builds new practice on the same patterns, focused on the mistakes. Child profiles by nickname; optional Gmail draft. **[Download the zip](https://github.com/thealignmentdesk/claude-skills/releases/download/student-workbook-v1.0/student-workbook.zip)** | claude.ai, desktop, phone, Cowork, Claude Code |
 
 Install steps: [INSTALL.md](INSTALL.md).
 
