@@ -49,7 +49,7 @@ Save it (see "Save the profiles"), confirm in one line ("Saved Joe: Grade 4, Ont
 ## Step 2: Find the official curriculum
 
 Look up the curriculum for that region, grade and subject. Use the official source in `references/curricula.md`.
-- **Ontario:** run `python3 scripts/ontario_curriculum.py show <grade> <subject>` (e.g. `show 4 math`, `show 6 science`, `show 9 math`). It prints every expectation with its code and the Ministry's exact wording. If it can't reach the internet (some sandboxes can't), use web search on dcp.edu.gov.on.ca, or the examples in `references/curricula.md`.
+- **Ontario:** the official expectations (codes and exact wording) for grades 1-8 math, language, science and social studies, and grade 9 math, are in `references/ontario/` (one file per grade and subject; see its README). Read the one you need and quote codes from it. With internet access you can also run `python3 scripts/ontario_curriculum.py show <grade> <subject>` for the live version.
 - **Elsewhere:** if you can search the web, open the official page and quote the expectation from it.
 - Pick 1-4 specific expectations (learning outcomes) the workbook will practise. Use the exact code and wording when the curriculum has them (Ontario math grade 4: codes like B1.1). Never make up a code. If you can't check the wording, describe the skill in plain words and write "check the official page" instead of a code.
 - Stay inside the grade. Don't pull in next year's topics.

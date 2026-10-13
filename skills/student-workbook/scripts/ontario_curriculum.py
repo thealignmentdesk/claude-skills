@@ -48,9 +48,19 @@ def text(value):
     return re.sub(r"\s+", " ", html.unescape(value)).strip()
 
 
+CANON = {"math": "Mathematics", "mathematics": "Mathematics", "language": "Language", "english": "Language",
+         "science": "Science and Technology", "social": "Social Studies", "social studies": "Social Studies",
+         "french": "Core French Program", "health": "Health and Physical Education", "arts": "The Arts"}
+
+
 def find(grade, subject):
     keys = SUBJECTS.get(subject.lower(), [subject.lower()])
     want = f"n{grade}"
+    canon = CANON.get(subject.lower())
+    if canon:   # grades 1-8: the course with exactly this name, tagged with this grade
+        exact = [c for c in courses() if c["name"].strip() == canon and want in c["grades"]]
+        if exact:
+            return exact
     hits = []
     for c in courses():
         hay = (c["name"] + " " + c["codename"] + " " + c["slug"]).lower()
